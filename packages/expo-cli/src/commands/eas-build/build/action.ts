@@ -1,6 +1,5 @@
 import { getConfig } from '@expo/config';
-import { ApiV2, User, UserManager } from '@expo/xdl';
-import { build } from '@hapi/joi';
+import { ApiV2, UserManager } from '@expo/xdl';
 import chalk from 'chalk';
 import delayAsync from 'delay-async';
 import fs from 'fs-extra';
@@ -11,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { EasConfig, EasJsonReader } from '../../../easJson';
 import log from '../../../log';
-import { ensureProjectExistsAsync } from '../../../projects';
+import { ensureProjectExistsAsync, getProjectData } from '../../../projects';
 import { UploadType, uploadAsync } from '../../../uploads';
 import { createProgressTracker } from '../../utils/progress';
 import { platformDisplayNames } from '../constants';
@@ -93,10 +92,9 @@ async function createBuilderContextAsync(
     skipProjectConfiguration?: boolean;
   }
 ): Promise<BuilderContext> {
-  const user: User = await UserManager.ensureLoggedInAsync();
-  const { exp } = getConfig(projectDir, { skipSDKVersionRequirement: true });
-  const accountName = exp.owner || user.username;
-  const projectName = exp.slug;
+  const user = await UserManager.ensureLoggedInAsync();
+  const { exp } = getConfig(projectDir);
+  const { accountName, projectName } = getProjectData(user, exp);
 
   return {
     eas,
