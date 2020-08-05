@@ -82,6 +82,12 @@ export async function login(options: CommandOptions): Promise<User> {
         return user;
       }
     }
+    if (user?.accessToken) {
+      throw new CommandError(
+        'ACCESS_TOKEN_ERROR',
+        'Please remove the EXPO_TOKEN environment var to login with a different user.'
+      );
+    }
     return _usernamePasswordAuth(options.username, options.password);
   } else if (options.username && options.password) {
     return _usernamePasswordAuth(options.username, options.password);
