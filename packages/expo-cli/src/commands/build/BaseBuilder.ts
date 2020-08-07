@@ -139,7 +139,8 @@ export default class BaseBuilder {
       this.options.releaseChannel!,
       this.platform(),
       this.manifest.sdkVersion!,
-      this.manifest.slug!
+      this.manifest.slug!,
+      this.manifest.owner
     );
     if (reuseStatus.canReuse) {
       log.warn(`Did you know that Expo provides over-the-air updates?
@@ -362,16 +363,15 @@ ${job.id}
       );
     }
 
-    const username = this.manifest.owner
-      ? this.manifest.owner
-      : await UserManager.getCurrentUsernameAsync();
+    const user = await UserManager.getCurrentUserAsync();
 
     if (buildId) {
-      log(
-        `You can monitor the build at\n\n ${chalk.underline(
-          UrlUtils.constructBuildLogsUrl({ buildId, username: username ?? undefined })
-        )}\n`
-      );
+      const url = UrlUtils.constructBuildLogsUrl({
+        buildId,
+        username: this.manifest.owner || (user?.kind === 'user' ? user.username : undefined),
+      });
+
+      log(`You can monitor the build at\n\n ${chalk.underline(url)}\n`);
     }
 
     if (this.options.wait) {

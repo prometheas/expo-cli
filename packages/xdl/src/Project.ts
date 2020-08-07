@@ -726,7 +726,8 @@ export async function findReusableBuildAsync(
   releaseChannel: string,
   platform: string,
   sdkVersion: string,
-  slug: string
+  slug: string,
+  owner?: string
 ): Promise<{ downloadUrl?: string; canReuse: boolean }> {
   const user = await UserManager.getCurrentUserAsync();
 
@@ -735,6 +736,7 @@ export async function findReusableBuildAsync(
     platform,
     sdkVersion,
     slug,
+    owner,
   });
 
   return buildReuseStatus;

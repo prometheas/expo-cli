@@ -1,5 +1,5 @@
 import { getConfig, setCustomConfigPath } from '@expo/config';
-import { Android, Simulator, UserManager, Versions } from '@expo/xdl';
+import { Android, Simulator, User, UserManager, Versions } from '@expo/xdl';
 import chalk from 'chalk';
 import CliTable from 'cli-table3';
 import { Command } from 'commander';
@@ -100,7 +100,7 @@ export default function (program: Command) {
         await context.ensureAppleCtx();
         const appleContext = context.appleCtx;
         if (user) {
-          await context.ios.getAllCredentials(user.username); // initialize credentials
+          await context.ios.getAllCredentials(context.projectOwner); // initialize credentials
         }
 
         // check if any builds are in flight
@@ -208,7 +208,7 @@ export default function (program: Command) {
           ({ email } = await prompt({
             name: 'email',
             message: 'Please enter an email address to notify, when the build is completed:',
-            default: context.user.email,
+            default: (context.user as User).email,
             filter: value => value.trim(),
             validate: (value: string) =>
               /.+@.+/.test(value) ? true : "That doesn't look like a valid email.",
