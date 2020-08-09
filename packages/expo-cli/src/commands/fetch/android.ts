@@ -41,7 +41,7 @@ export async function fetchAndroidKeystoreAsync(
   const keystoreFilename = `${ctx.manifest.slug}.jks`;
   await maybeRenameExistingFile(projectDir, keystoreFilename);
   const backupKeystoreOutputPath = path.resolve(projectDir, keystoreFilename);
-  const experienceName = `@${ctx.manifest.owner || ctx.user.username}/${ctx.manifest.slug}`;
+  const experienceName = `@${ctx.projectOwner}/${ctx.manifest.slug}`;
 
   invariant(ctx.manifest.slug, 'app.json slug field must be set');
   await runCredentialsManager(
@@ -61,7 +61,7 @@ export async function fetchAndroidHashesAsync(projectDir: string, options: Optio
   const outputPath = path.resolve(projectDir, `${ctx.manifest.slug}.tmp.jks`);
   try {
     invariant(ctx.manifest.slug, 'app.json slug field must be set');
-    const experienceName = `@${ctx.manifest.owner || ctx.user.username}/${ctx.manifest.slug}`;
+    const experienceName = `@${ctx.projectOwner}/${ctx.manifest.slug}`;
     const view = new DownloadKeystore(experienceName, {
       outputPath,
       quiet: true,
@@ -104,7 +104,7 @@ export async function fetchAndroidUploadCertAsync(
 
   try {
     invariant(ctx.manifest.slug, 'app.json slug field must be set');
-    const experienceName = `@${ctx.manifest.owner || ctx.user.username}/${ctx.manifest.slug}`;
+    const experienceName = `@${ctx.projectOwner}/${ctx.manifest.slug}`;
     const view = new DownloadKeystore(experienceName, {
       outputPath: keystorePath,
       quiet: true,
