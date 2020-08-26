@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { EasConfig, EasJsonReader } from '../../../easJson';
 import log from '../../../log';
-import { ensureProjectExistsAsync, getProjectData } from '../../../projects';
+import { ensureProjectExistsAsync, getProjectOwner } from '../../../projects';
 import { UploadType, uploadAsync } from '../../../uploads';
 import { createProgressTracker } from '../../utils/progress';
 import { platformDisplayNames } from '../constants';
@@ -94,7 +94,8 @@ async function createBuilderContextAsync(
 ): Promise<BuilderContext> {
   const user = await UserManager.ensureLoggedInAsync();
   const { exp } = getConfig(projectDir);
-  const { accountName, projectName } = getProjectData(user, exp);
+  const accountName = getProjectOwner(user, exp);
+  const projectName = exp.slug;
 
   return {
     eas,

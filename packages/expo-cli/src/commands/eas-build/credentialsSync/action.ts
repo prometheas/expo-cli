@@ -63,7 +63,7 @@ async function updateRemoteCredentialsAsync(
     throw new Error('project context is required'); // should be checked earlier
   }
   if ([BuildCommandPlatform.ALL, BuildCommandPlatform.ANDROID].includes(platform)) {
-    const experienceName = `@${ctx.manifest.owner || ctx.user.username}/${ctx.manifest.slug}`;
+    const experienceName = `@${ctx.projectOwner}/${ctx.manifest.slug}`;
     await runCredentialsManager(ctx, new SetupAndroidBuildCredentialsFromLocal(experienceName));
   }
   if ([BuildCommandPlatform.ALL, BuildCommandPlatform.IOS].includes(platform)) {
